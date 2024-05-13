@@ -1,6 +1,6 @@
 locals {
   project_vars = read_terragrunt_config(find_in_parent_folders("project.hcl")).locals
-  environment = "prod"
+  environment = "dev"
 }
 
 generate "provider" {

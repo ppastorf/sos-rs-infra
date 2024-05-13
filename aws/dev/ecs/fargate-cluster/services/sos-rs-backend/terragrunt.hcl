@@ -34,6 +34,7 @@ locals {
   container_api_port = 80
 }
 
+# https://registry.terraform.io/modules/terraform-aws-modules/ecs/aws/latest/submodules/service?tab=inputs
 inputs = {
   name        = "${local.project_name}-${local.environment}-sos_rs_backend"
   cluster_arn = dependency.ecs_cluster.outputs.arn
