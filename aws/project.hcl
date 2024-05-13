@@ -1,5 +1,5 @@
 locals {
-  project_name   = "sos_rs"
+  project_name   = "sos-rs"
   default_region = "sa-east-1"
 }
 

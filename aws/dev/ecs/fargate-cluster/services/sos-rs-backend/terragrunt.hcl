@@ -22,6 +22,14 @@ dependency "ecs_cluster" {
   config_path = "../../cluster"
 }
 
+dependency "alb" {
+  config_path = "./alb"
+}
+
+dependency "security_group" {
+  config_path = "./security-group"
+}
+
 locals {
   project_name = include.project.locals.project_name
   environment  = include.env.locals.environment
@@ -29,6 +37,7 @@ locals {
   # consideracao importante ao montar a pipeline de deploy:
   # https://github.com/terraform-aws-modules/terraform-aws-ecs/blob/master/docs/README.md#service-1
 
+  container_name = "sos-rs-backend"
   container_image = "docker.io/library/nginx"
   image_tag       = "latest"
   container_api_port = 80
@@ -46,7 +55,7 @@ inputs = {
 
   # https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html
   container_definitions = {
-    sos-rs-backend = {
+    (local.container_name) = {
 
       # cpu       = 512
       # memory    = 1024
@@ -63,31 +72,22 @@ inputs = {
         }
       ]
 
-      readonly_root_filesystem = true
+      readonly_root_filesystem = false
       enable_cloudwatch_logging = true
     }
   }
 
-  subnet_ids = dependency.vpc.outputs.private_subnets
+  subnet_ids = dependency.vpc.outputs.public_subnets
 
-  load_balancer = {}
-
-  security_group_rules = {
-    alb_ingress_api = {
-      type                     = "ingress"
-      from_port                = local.container_api_port
-      to_port                  = local.container_api_port
-      protocol                 = "tcp"
-      description              = "Porta para a API"
-      source_security_group_id = ""
-    }
-    egress_all = {
-      type        = "egress"
-      from_port   = 0
-      to_port     = 0
-      protocol    = "-1"
-      cidr_blocks = ["0.0.0.0/0"]
+  load_balancer = {
+    service = {
+      target_group_arn = dependency.alb.outputs.target_groups.ecs-http.arn
+      container_name   = local.container_name
+      container_port   = local.container_api_port
     }
   }
+
+  create_security_group = false
+  security_group_ids = [dependency.security_group.outputs.security_group_id]
 }
 
