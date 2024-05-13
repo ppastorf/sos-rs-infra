@@ -43,25 +43,37 @@ inputs = {
   name        = "${local.project_name}-${local.environment}-sos_rs_backend"
   cluster_arn = dependency.ecs_cluster.outputs.arn
 
-  # cpu    = 2048
-  # memory = 4096
+  # deve ser maior que o maximo possivel usado por todos os possiveis containers, e uma das configuracoes:
+  # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-tasks-services.html#fargate-tasks-size
+  cpu    = 2048
+  memory = 4096
+
+  enable_autoscaling = true
+  autoscaling_min_capacity = 1
+  autoscaling_max_capacity = 4
 
   enable_execute_command = true
+  launch_type = "FARGATE"
+
+  # ignore_task_definition_changes = true
 
   # https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html
   container_definitions = {
     (local.container_name) = {
+      image = "${local.container_image}:${local.image_tag}"
 
-      # cpu       = 512
-      # memory    = 1024
+      # command = []
+      # environment = []
 
-      memory_reservation = 100
+      # https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_Secret.html
+      # secrets = [] 
 
-      essential = true
-      image     = "${local.container_image}:${local.image_tag}"
+      # cpu    = 512
+      # memory = 1024
+      # memory_reservation = 512
+
       port_mappings = [
         {
-          name          = "api"
           containerPort = local.container_api_port
           protocol      = "tcp"
         }
@@ -72,6 +84,7 @@ inputs = {
     }
   }
 
+  assign_public_ip = false
   subnet_ids = dependency.vpc.outputs.private_subnets
 
   load_balancer = {
@@ -88,7 +101,7 @@ inputs = {
       from_port   = 80
       to_port     = 80
       protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
+      cidr_blocks = [dependency.vpc.outputs.vpc_cidr_block]
     },
     egress_all = {
       type        = "egress"

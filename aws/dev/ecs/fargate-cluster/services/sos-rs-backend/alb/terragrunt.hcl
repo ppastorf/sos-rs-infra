@@ -1,4 +1,4 @@
-# https://registry.terraform.io/modules/terraform-aws-modules/ecs/aws/latest/submodules/cluster/
+# https://registry.terraform.io/modules/terraform-aws-modules/alb/aws/
 
 terraform {
   source = "tfr:///terraform-aws-modules/alb/aws?version=9.9.0"
@@ -26,12 +26,16 @@ locals {
 
 inputs = {
   name = local.alb_name
+  load_balancer_type = "application"
 
+  internal = false
   vpc_id  = dependency.vpc.outputs.vpc_id
-
-  # verify
   subnets = dependency.vpc.outputs.public_subnets
 
+  # route53_records = {}
+  # access_logs = {}
+
+  # security group
   security_group_ingress_rules = {
     http = {
       from_port   = 80
@@ -40,19 +44,12 @@ inputs = {
       cidr_ipv4   = "0.0.0.0/0"
     }
   }
-
   security_group_egress_rules = {
     all = {
-      from_port   = 0
-      to_port     = 0
       ip_protocol = "-1"
       cidr_ipv4   = "0.0.0.0/0"
     }
   }
-
-  # access_logs = {
-  #   bucket = "${local.alb_name}-logs"
-  # }
 
   listeners = {
     http = {
