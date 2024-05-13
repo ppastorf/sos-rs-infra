@@ -26,10 +26,6 @@ dependency "alb" {
   config_path = "./alb"
 }
 
-dependency "security_group" {
-  config_path = "./security-group"
-}
-
 locals {
   project_name = include.project.locals.project_name
   environment  = include.env.locals.environment
@@ -37,13 +33,12 @@ locals {
   # consideracao importante ao montar a pipeline de deploy:
   # https://github.com/terraform-aws-modules/terraform-aws-ecs/blob/master/docs/README.md#service-1
 
-  container_name = "sos-rs-backend"
+  container_name  = "sos-rs-backend"
   container_image = "docker.io/library/nginx"
   image_tag       = "latest"
   container_api_port = 80
 }
 
-# https://registry.terraform.io/modules/terraform-aws-modules/ecs/aws/latest/submodules/service?tab=inputs
 inputs = {
   name        = "${local.project_name}-${local.environment}-sos_rs_backend"
   cluster_arn = dependency.ecs_cluster.outputs.arn
@@ -77,7 +72,7 @@ inputs = {
     }
   }
 
-  subnet_ids = dependency.vpc.outputs.public_subnets
+  subnet_ids = dependency.vpc.outputs.private_subnets
 
   load_balancer = {
     service = {
@@ -87,7 +82,21 @@ inputs = {
     }
   }
 
-  create_security_group = false
-  security_group_ids = [dependency.security_group.outputs.security_group_id]
+  security_group_rules = {
+    ingress_http = {
+      type        = "ingress"
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    },
+    egress_all = {
+      type        = "egress"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
 }
 

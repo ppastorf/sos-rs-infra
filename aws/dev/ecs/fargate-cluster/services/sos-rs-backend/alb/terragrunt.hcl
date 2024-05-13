@@ -18,10 +18,6 @@ dependency "vpc" {
   config_path = "../../../../../vpc"
 }
 
-dependency "security_group" {
-  config_path = "../security-group"
-}
-
 locals {
   project_name = include.project.locals.project_name
   environment  = include.env.locals.environment
@@ -36,23 +32,23 @@ inputs = {
   # verify
   subnets = dependency.vpc.outputs.public_subnets
 
-  # security_group_ingress_rules = {
-  #   all_http = {
-  #     from_port   = 80
-  #     to_port     = 80
-  #     ip_protocol = "tcp"
-  #     cidr_ipv4   = "0.0.0.0/0"
-  #   }
-  # }
-  # security_group_egress_rules = {
-  #   all = {
-  #     ip_protocol = "-1"
-  #     cidr_ipv4   = "0.0.0.0/0"
-  #   }
-  # }
+  security_group_ingress_rules = {
+    http = {
+      from_port   = 80
+      to_port     = 80
+      ip_protocol = "tcp"
+      cidr_ipv4   = "0.0.0.0/0"
+    }
+  }
 
-  create_security_group = false
-  security_groups = [dependency.security_group.outputs.security_group_id]
+  security_group_egress_rules = {
+    all = {
+      from_port   = 0
+      to_port     = 0
+      ip_protocol = "-1"
+      cidr_ipv4   = "0.0.0.0/0"
+    }
+  }
 
   # access_logs = {
   #   bucket = "${local.alb_name}-logs"
