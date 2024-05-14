@@ -1,7 +1,7 @@
 # https://registry.terraform.io/modules/terraform-aws-modules/rds-aurora/aws/
 
 terraform {
-  source = "tfr:///terraform-aws-modules/rds/aws?version=9.3.1"
+  source = "tfr:///terraform-aws-modules/rds-aurora/aws?version=9.3.1"
 }
 
 include "project" {
@@ -15,98 +15,100 @@ include "env" {
 }
 
 dependency "vpc" {
-  config_path = "../../../../vpc"
+  config_path = "../../vpc"
+}
+
+locals {
+  project_name = include.project.locals.project_name
+  environment  = include.env.locals.environment
+
+  db_name = "${local.project_name}-${local.environment}-backend-pg"
 }
 
 inputs = {
-  identifier = "${include.project.locals.project_name}-${include.env.locals.environment}-backend_db"
+  identifier = "${local.db_name}-cluster"
+  name       = "${local.db_name}"
 
-  # All available versions: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html#PostgreSQL.Concepts
+  vpc_id                 = dependency.vpc.outputs.vpc_id
+  availability_zones     = dependency.vpc.outputs.azs
 
-  engine          = "aurora-postgresql"
-  engine_version  = "15.4"
-  master_username = "root"
-  storage_type    = "aurora-iopt1"
-  instances = {
-    1 = {
-      instance_class          = "db.r5.2xlarge"
-      publicly_accessible     = true
-      db_parameter_group_name = "default.aurora-postgresql14"
-    }
-    2 = {
-      identifier     = "static-member-1"
-      instance_class = "db.r5.2xlarge"
-    }
-    3 = {
-      identifier     = "excluded-member-1"
-      instance_class = "db.r5.large"
-      promotion_tier = 15
-    }
+  subnets                = dependency.vpc.outputs.private_subnets
+  create_db_subnet_group = true
+
+  deletion_protection = false # habilitar para prod
+
+  # engine
+  engine         = "aurora-postgresql"
+  engine_version = "15.4"
+  engine_mode    = "provisioned"
+  database_name  = "sos_rs_db_dev"
+
+  # acesso
+  port = 5432
+  enable_http_endpoint = false
+  master_username = "postgres"
+  iam_database_authentication_enabled = false
+  
+  # senha
+  manage_master_user_password = true
+  manage_master_user_password_rotation = true
+  master_user_password_rotation_automatically_after_days = 7
+
+  # armazenamento
+  storage_encrypted = false   # validar como fazer restore do dump em plaintext para banco encriptado
+
+  # backup
+  copy_tags_to_snapshot     = true
+  backup_retention_period   = 7     # dias
+  delete_automated_backups  = false
+
+  skip_final_snashot = true    # desabilitar para prod
+  final_snapshot_identifier = "${local.db_name}-final-snapshot"
+
+  # upgrades
+  allow_major_version_upgrade = false
+  auto_minor_version_upgrade  = false
+
+  # instancias, scaling
+  # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html
+  instance_class = "db.serverless"
+
+  # valido apenas para engine_mode = "provisioned" (serverless v2)
+  # https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.how-it-works.html
+  serverlessv2_scaling_configuration = {
+    max_capacity             = 8
+    min_capacity             = 2
   }
-
-  endpoints = {
-    static = {
-      identifier     = "static-custom-endpt"
-      type           = "ANY"
-      static_members = ["static-member-1"]
-      tags           = { Endpoint = "static-members" }
-    }
-    excluded = {
-      identifier       = "excluded-custom-endpt"
-      type             = "READER"
-      excluded_members = ["excluded-member-1"]
-      tags             = { Endpoint = "excluded-members" }
-    }
-  }
-
-  vpc_id               = module.vpc.vpc_id
-  db_subnet_group_name = module.vpc.database_subnet_group_name
+  
+  # security group
   security_group_rules = {
-    vpc_ingress = {
-      cidr_blocks = module.vpc.private_subnets_cidr_blocks
+    ingress = {
+      type = "ingress"
+      from_port   = 5432
+      to_port     = 5432
+      protocol    = "tcp"
+      cidr_blocks = [dependency.vpc.outputs.vpc_cidr_block]
     }
-    egress_example = {
-      cidr_blocks = ["10.33.0.0/28"]
-      description = "Egress to corporate printer closet"
+    egress = {
+      type        = "egress"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = [dependency.vpc.outputs.vpc_cidr_block]
     }
   }
 
-  apply_immediately   = true
-  skip_final_snapshot = true
+  # monitoramento
+  monitoring_interval = 30
 
-  create_db_cluster_parameter_group      = true
-  db_cluster_parameter_group_name        = local.name
-  db_cluster_parameter_group_family      = "aurora-postgresql14"
-  db_cluster_parameter_group_description = "${local.name} example cluster parameter group"
-  db_cluster_parameter_group_parameters = [
-    {
-      name         = "log_min_duration_statement"
-      value        = 4000
-      apply_method = "immediate"
-      }, {
-      name         = "rds.force_ssl"
-      value        = 1
-      apply_method = "immediate"
-    }
-  ]
-
-  create_db_parameter_group      = true
-  db_parameter_group_name        = local.name
-  db_parameter_group_family      = "aurora-postgresql14"
-  db_parameter_group_description = "${local.name} example DB parameter group"
-  db_parameter_group_parameters = [
-    {
-      name         = "log_min_duration_statement"
-      value        = 4000
-      apply_method = "immediate"
-    }
-  ]
-
-  enabled_cloudwatch_logs_exports = ["postgresql"]
+  # logs
+  enabled_cloudwatch_logs_exports = ["postgresql"] # "audit", "error", "general", "slowquery", "postgresql"
   create_cloudwatch_log_group     = true
+  cloudwatch_log_group_retention_in_days = 7
 
-  create_db_cluster_activity_stream     = true
-  db_cluster_activity_stream_kms_key_id = module.kms.key_id
-  db_cluster_activity_stream_mode       = "async"
+  # # activity stream
+  # create_db_cluster_activity_stream     = true
+  # db_cluster_activity_stream_kms_key_id = ""
+  # db_cluster_activity_stream_mode       = "async" # sync, async
 }
 
