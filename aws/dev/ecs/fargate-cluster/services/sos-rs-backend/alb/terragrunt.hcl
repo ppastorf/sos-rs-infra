@@ -4,13 +4,8 @@ terraform {
   source = "tfr:///terraform-aws-modules/alb/aws?version=9.9.0"
 }
 
-include "project" {
-  path = find_in_parent_folders("project.hcl")
-  expose = true
-}
-
 include "env" {
-  path = find_in_parent_folders("env.hcl")
+  path = find_in_parent_folders("environment.hcl")
   expose = true
 }
 
@@ -19,9 +14,7 @@ dependency "vpc" {
 }
 
 locals {
-  project_name = include.project.locals.project_name
-  environment  = include.env.locals.environment
-  alb_name = "${local.project_name}-${local.environment}-sos-rs-backend-alb"
+  alb_name = "${include.env.locals.env_prefix}-sos-rs-backend-alb"
 }
 
 inputs = {
@@ -31,6 +24,8 @@ inputs = {
   internal = false
   vpc_id  = dependency.vpc.outputs.vpc_id
   subnets = dependency.vpc.outputs.public_subnets
+
+  enable_deletion_protection = false
 
   # route53_records = {}
   # access_logs = {}

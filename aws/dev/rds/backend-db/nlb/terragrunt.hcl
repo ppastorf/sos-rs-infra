@@ -4,13 +4,8 @@ terraform {
   source = "tfr:///terraform-aws-modules/alb/aws?version=9.9.0"
 }
 
-include "project" {
-  path = find_in_parent_folders("project.hcl")
-  expose = true
-}
-
 include "env" {
-  path = find_in_parent_folders("env.hcl")
+  path = find_in_parent_folders("environment.hcl")
   expose = true
 }
 
@@ -18,14 +13,8 @@ dependency "vpc" {
   config_path = "../../../../../vpc"
 }
 
-locals {
-  project_name = include.project.locals.project_name
-  environment  = include.env.locals.environment
-  nlb_name = "${local.project_name}-${local.environment}-backend-db-nlb"
-}
-
 inputs = {
-  name = local.alb_name
+  name = "${include.env.locals.env_prefix}-backend-db-nlb"
   load_balancer_type = "network"
 
   internal = false

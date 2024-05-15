@@ -4,23 +4,13 @@ terraform {
   source = "tfr:///terraform-aws-modules/ecs/aws//modules/cluster?version=5.11.1"
 }
 
-include "project" {
-  path = find_in_parent_folders("project.hcl")
-  expose = true
-}
-
 include "env" {
-  path = find_in_parent_folders("env.hcl")
+  path = find_in_parent_folders("environment.hcl")
   expose = true
-}
-
-locals {
-  project_name = include.project.locals.project_name
-  environment  = include.env.locals.environment
 }
 
 inputs = {
-  cluster_name = "${local.project_name}-${local.environment}-fargate_cluster"
+  cluster_name = "${include.env.locals.env_prefix}-fargate_cluster"
 
   cluster_settings = [
     {

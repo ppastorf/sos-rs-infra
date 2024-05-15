@@ -4,25 +4,17 @@ terraform {
   source = "tfr:///terraform-aws-modules/rds-aurora/aws?version=9.3.1"
 }
 
-include "project" {
-  path = find_in_parent_folders("project.hcl")
-  expose = true
-}
-
 include "env" {
-  path = find_in_parent_folders("env.hcl")
+  path = find_in_parent_folders("environment.hcl")
   expose = true
 }
 
 dependency "vpc" {
-  config_path = "../../vpc"
+  config_path = "../../../vpc"
 }
 
 locals {
-  project_name = include.project.locals.project_name
-  environment  = include.env.locals.environment
-
-  db_name = "${local.project_name}-${local.environment}-backend-pg"
+  db_name = "${include.env.locals.env_prefix}-backend-pg"
 }
 
 inputs = {
@@ -74,10 +66,21 @@ inputs = {
   instance_class = "db.serverless"
 
   # valido apenas para engine_mode = "provisioned" (serverless v2)
-  # https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.how-it-works.html
+  # https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html
   serverlessv2_scaling_configuration = {
     max_capacity             = 8
     min_capacity             = 2
+  }
+
+  apply_immediately   = true
+  publicly_accessible = false
+
+  instances = {
+    # 1 = {
+    #   instance_class = "db.m5.large"
+    # }
+    1 = {}
+    2 = {}
   }
   
   # security group

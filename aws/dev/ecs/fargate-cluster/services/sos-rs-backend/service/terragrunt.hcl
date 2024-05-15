@@ -4,32 +4,24 @@ terraform {
   source = "tfr:///terraform-aws-modules/ecs/aws//modules/service?version=5.11.1"
 }
 
-include "project" {
-  path = find_in_parent_folders("project.hcl")
-  expose = true
-}
-
 include "env" {
-  path = find_in_parent_folders("env.hcl")
+  path = find_in_parent_folders("environment.hcl")
   expose = true
 }
 
 dependency "vpc" {
-  config_path = "../../../../vpc"
+  config_path = "../../../../../vpc"
 }
 
 dependency "ecs_cluster" {
-  config_path = "../../cluster"
+  config_path = "../../../cluster"
 }
 
 dependency "alb" {
-  config_path = "./alb"
+  config_path = "../alb"
 }
 
 locals {
-  project_name = include.project.locals.project_name
-  environment  = include.env.locals.environment
-
   # consideracao importante ao montar a pipeline de deploy:
   # https://github.com/terraform-aws-modules/terraform-aws-ecs/blob/master/docs/README.md#service-1
 
@@ -40,7 +32,7 @@ locals {
 }
 
 inputs = {
-  name        = "${local.project_name}-${local.environment}-sos_rs_backend"
+  name        = "${include.env.locals.env_prefix}-sos_rs_backend"
   cluster_arn = dependency.ecs_cluster.outputs.arn
 
   # deve ser maior que o maximo possivel usado por todos os possiveis containers, e uma das configuracoes:
