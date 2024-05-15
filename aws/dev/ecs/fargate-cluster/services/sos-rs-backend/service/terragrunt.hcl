@@ -21,21 +21,31 @@ dependency "alb" {
   config_path = "../alb"
 }
 
+# dependency "database" {
+#   config_path = "../../../../../rds/backend-db/aurora-cluster"
+# }
+
 locals {
   # consideracao importante ao montar a pipeline de deploy:
   # https://github.com/terraform-aws-modules/terraform-aws-ecs/blob/master/docs/README.md#service-1
 
   container_name  = "sos-rs-backend"
-  container_image = "docker.io/library/nginx"
-  image_tag       = "latest"
-  container_api_port = 80
+  container_image = "339713018519.dkr.ecr.sa-east-1.amazonaws.com/sos-rs-dev-backend"
+  image_tag       = "v0.1.0"
+
+  app_config = {
+    port = 80
+    host = "0.0.0.0"
+  }
+
+  # gerenciado manualmente
+  secret_manager_config_arn = "arn:aws:secretsmanager:sa-east-1:339713018519:secret:sos-rs-dev-backend-app-secrets-yIqCSp"
 }
 
 inputs = {
   name        = "${include.env.locals.env_prefix}-sos_rs_backend"
   cluster_arn = dependency.ecs_cluster.outputs.arn
 
-  # deve ser maior que o maximo possivel usado por todos os possiveis containers, e uma das configuracoes:
   # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-tasks-services.html#fargate-tasks-size
   cpu    = 2048
   memory = 4096
@@ -54,19 +64,61 @@ inputs = {
     (local.container_name) = {
       image = "${local.container_image}:${local.image_tag}"
 
-      # command = []
-      # environment = []
-
-      # https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_Secret.html
-      # secrets = [] 
-
       # cpu    = 512
       # memory = 1024
       # memory_reservation = 512
 
+      entrypoint = ["sh", "-c"]
+
+      command = [
+        "npx prisma generate && npx prisma migrate deploy && npm run build && npm run start:dev"
+      ]
+
+      environment = [
+        {
+          name = "PORT",
+          value = local.app_config.port
+        },
+        {
+          name = "HOST",
+          value = local.app_config.host
+        },
+        # {
+        #   name = "DB_HOST",
+        #   value = dependency.database.outputs.cluster_endpoint
+        # },
+        # {
+        #   name = "DB_PORT",
+        #   value = dependency.database.outputs.cluster_port
+        # },
+        # {
+        #   name = "DB_DATABASE_NAME",
+        #   value = local.app_config.database_name
+        # }
+      ]
+
+      secrets = [
+        # {
+        #   name = "DB_USER",
+        #   valueFrom = "${dependency.database.outputs.cluster_master_user_secret.value[0].secret_arn}:username"
+        # },
+        # {
+        #   name = "DB_PASSWORD",
+        #   valueFrom = "${dependency.database.outputs.cluster_master_user_secret.value[0].secret_arn}:password"
+        # },
+        {
+          name = "SECRET_KEY",
+          valueFrom = "${local.secret_manager_config_arn}:SECRET_KEY"
+        },
+        {
+          name = "DATABASE_URL",
+          valueFrom = "${local.secret_manager_config_arn}:DATABASE_URL"
+        }
+      ] 
+
       port_mappings = [
         {
-          containerPort = local.container_api_port
+          containerPort = local.app_config.port
           protocol      = "tcp"
         }
       ]
@@ -83,7 +135,7 @@ inputs = {
     service = {
       target_group_arn = dependency.alb.outputs.target_groups.ecs-http.arn
       container_name   = local.container_name
-      container_port   = local.container_api_port
+      container_port   = local.app_config.port
     }
   }
 
