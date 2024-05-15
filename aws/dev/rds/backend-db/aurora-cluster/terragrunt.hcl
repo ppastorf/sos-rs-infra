@@ -39,12 +39,8 @@ inputs = {
   port = 5432
   enable_http_endpoint = false
   master_username = "postgres"
-  iam_database_authentication_enabled = false
-  
-  # senha
   manage_master_user_password = true
-  manage_master_user_password_rotation = true
-  master_user_password_rotation_automatically_after_days = 7
+  iam_database_authentication_enabled = false
 
   # armazenamento
   storage_encrypted = false   # validar como fazer restore do dump em plaintext para banco encriptado
@@ -76,9 +72,6 @@ inputs = {
   publicly_accessible = false
 
   instances = {
-    # 1 = {
-    #   instance_class = "db.m5.large"
-    # }
     1 = {}
     2 = {}
   }
