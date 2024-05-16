@@ -56,13 +56,46 @@ inputs = {
     }
   }
 
+  # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_target_group
   target_groups = {
     ecs-http = {
       name_prefix = "h1"
+      # name = ""
       protocol    = "HTTP"
       port        = 80
       target_type = "ip"
       create_attachment = false
+
+      health_check = {
+        enabled = true
+        path = "/shelters"
+        # healthy_threshold = ""
+        # interval = ""
+        # matcher = ""
+        # port = ""
+        # protocol = ""
+        # timeout = ""
+        # unhealthy_threshold = ""
+      }
+
+      # ip_address_type = ""
+      # lambda_multi_value_headers_enabled = ""
+      # load_balancing_algorithm_type = ""
+      # load_balancing_anomaly_mitigation = ""
+      # load_balancing_cross_zone_enabled = ""
+      # preserve_client_ip = ""
+      # protocol_version = ""
+      # proxy_protocol_v2 = ""
+      # slow_start = ""
+      # connection_termination = ""
+      # deregistration_delay = ""
+      # target_health_state = {
+        # enable_unhealthy_connection_termination = ""
+      # }
+      # target_failover = {
+        # on_deregistration = ""
+        # on_unhealthy = ""
+      # }
     }
   }
 }

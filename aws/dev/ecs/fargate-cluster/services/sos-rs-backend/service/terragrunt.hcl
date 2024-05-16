@@ -108,11 +108,11 @@ inputs = {
         # },
         {
           name = "SECRET_KEY",
-          valueFrom = "${local.secret_manager_config_arn}:SECRET_KEY"
+          valueFrom = "${local.secret_manager_config_arn}:SECRET_KEY::"
         },
         {
           name = "DATABASE_URL",
-          valueFrom = "${local.secret_manager_config_arn}:DATABASE_URL"
+          valueFrom = "${local.secret_manager_config_arn}:DATABASE_URL::"
         }
       ] 
 
@@ -142,8 +142,8 @@ inputs = {
   security_group_rules = {
     ingress_http = {
       type        = "ingress"
-      from_port   = 80
-      to_port     = 80
+      from_port   = local.app_config.port
+      to_port     = local.app_config.port
       protocol    = "tcp"
       cidr_blocks = [dependency.vpc.outputs.vpc_cidr_block]
     },
