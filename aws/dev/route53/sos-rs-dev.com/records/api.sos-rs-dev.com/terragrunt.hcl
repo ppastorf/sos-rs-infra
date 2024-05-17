@@ -5,7 +5,7 @@ terraform {
 }
 
 include "env" {
-  path = find_in_parent_folders("environment.hcl")
+  path = find_in_parent_folders()
   expose = true
 }
 

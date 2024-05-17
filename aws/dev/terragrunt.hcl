@@ -2,7 +2,7 @@ locals {
   project_name = "sos-rs"
   environment  = "dev"
   region       = "sa-east-1"
-  account_id   = "339713018519"
+  account_id   = ""
   env_prefix   = "${local.project_name}-${local.environment}"
 }
 
