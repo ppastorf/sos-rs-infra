@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-source ../.env
-
 # coloca arquivo de dump na jumpbox, o extrai e restaura no banco
 #
 # requisitos
@@ -12,24 +10,22 @@ source ../.env
 
 # config
 DB_HOST=""
-DB_PORT=""
-DB_NAME=""
-DB_USER=""
+DB_PORT="5432"
+DB_NAME="sos_rs_db"
+DB_USER="postgres"
 DB_PASS=""
 
 JUMPBOX_HOST=""
-JUMPBOX_USER=""
+JUMPBOX_USER="ubuntu"
 JUMPBOX_SSHKEY=""
 
-DUMP_FILE=""
+DUMP_FILE="data/postgres/dump.sql"
 
-scp -i $JUMPBOX_SSHKEY $DUMP_FILE ${JUMPBOX_USER}@${JUMPBOX_HOST}:/tmp/dump.zip
+scp -i $JUMPBOX_SSHKEY $DUMP_FILE ${JUMPBOX_USER}@${JUMPBOX_HOST}:/tmp/dump.sql
 ssh -T -i $JUMPBOX_SSHKEY ${JUMPBOX_USER}@${JUMPBOX_HOST} 1>/dev/null <<EOF
   set -eu
-  sudo apt-get install -y unzip > /dev/null 
-  unzip -o -qq -d /tmp/dump /tmp/dump.zip
-  export PGPASSWORD='$DB_PASS'
-  pg_restore -h '$DB_HOST' -p '$DB_PORT' -U '$DB_USER' -d '$DB_NAME' \$(find /tmp/dump/* -name "*.sql" | head -n1)
-  rm -rf /tmp/dump.zip /tmp/dump
+  sudo apt-get install -y postgresql-client > /dev/null 
+  PGPASSWORD='$DB_PASS' psql -h '$DB_HOST' -p '$DB_PORT' -U '$DB_USER' -f /tmp/dump.sql
+  rm /tmp/dump.sql
 EOF
 

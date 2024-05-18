@@ -17,15 +17,15 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: sos-rs-prod-2; Type: DATABASE; Schema: -; Owner: doadmin
+-- Name: sos_rs_db; Type: DATABASE; Schema: -; Owner: postgres
 --
 
-CREATE DATABASE "sos-rs-prod-2" WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'en_US.UTF-8';
+CREATE DATABASE "sos_rs_db" WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'en_US.UTF-8';
 
 
-ALTER DATABASE "sos-rs-prod-2" OWNER TO doadmin;
+ALTER DATABASE "sos_rs_db" OWNER TO postgres;
 
-\connect -reuse-previous=on "dbname='sos-rs-prod-2'"
+\connect -reuse-previous=on "dbname='sos_rs_db'"
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -55,7 +55,7 @@ COMMENT ON SCHEMA public IS 'standard public schema';
 
 
 --
--- Name: AccessLevel; Type: TYPE; Schema: public; Owner: doadmin
+-- Name: AccessLevel; Type: TYPE; Schema: public; Owner: postgres
 --
 
 CREATE TYPE public."AccessLevel" AS ENUM (
@@ -66,14 +66,14 @@ CREATE TYPE public."AccessLevel" AS ENUM (
 );
 
 
-ALTER TYPE public."AccessLevel" OWNER TO doadmin;
+ALTER TYPE public."AccessLevel" OWNER TO postgres;
 
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
--- Name: _prisma_migrations; Type: TABLE; Schema: public; Owner: doadmin
+-- Name: _prisma_migrations; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public._prisma_migrations (
@@ -88,10 +88,10 @@ CREATE TABLE public._prisma_migrations (
 );
 
 
-ALTER TABLE public._prisma_migrations OWNER TO doadmin;
+ALTER TABLE public._prisma_migrations OWNER TO postgres;
 
 --
--- Name: category_supplies; Type: TABLE; Schema: public; Owner: doadmin
+-- Name: category_supplies; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.category_supplies (
@@ -102,10 +102,10 @@ CREATE TABLE public.category_supplies (
 );
 
 
-ALTER TABLE public.category_supplies OWNER TO doadmin;
+ALTER TABLE public.category_supplies OWNER TO postgres;
 
 --
--- Name: sessions; Type: TABLE; Schema: public; Owner: doadmin
+-- Name: sessions; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.sessions (
@@ -119,10 +119,10 @@ CREATE TABLE public.sessions (
 );
 
 
-ALTER TABLE public.sessions OWNER TO doadmin;
+ALTER TABLE public.sessions OWNER TO postgres;
 
 --
--- Name: shelter_managers; Type: TABLE; Schema: public; Owner: doadmin
+-- Name: shelter_managers; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.shelter_managers (
@@ -133,10 +133,10 @@ CREATE TABLE public.shelter_managers (
 );
 
 
-ALTER TABLE public.shelter_managers OWNER TO doadmin;
+ALTER TABLE public.shelter_managers OWNER TO postgres;
 
 --
--- Name: shelter_supplies; Type: TABLE; Schema: public; Owner: doadmin
+-- Name: shelter_supplies; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.shelter_supplies (
@@ -149,10 +149,10 @@ CREATE TABLE public.shelter_supplies (
 );
 
 
-ALTER TABLE public.shelter_supplies OWNER TO doadmin;
+ALTER TABLE public.shelter_supplies OWNER TO postgres;
 
 --
--- Name: shelters; Type: TABLE; Schema: public; Owner: doadmin
+-- Name: shelters; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.shelters (
@@ -178,10 +178,10 @@ CREATE TABLE public.shelters (
 );
 
 
-ALTER TABLE public.shelters OWNER TO doadmin;
+ALTER TABLE public.shelters OWNER TO postgres;
 
 --
--- Name: supplies; Type: TABLE; Schema: public; Owner: doadmin
+-- Name: supplies; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.supplies (
@@ -193,10 +193,10 @@ CREATE TABLE public.supplies (
 );
 
 
-ALTER TABLE public.supplies OWNER TO doadmin;
+ALTER TABLE public.supplies OWNER TO postgres;
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: doadmin
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.users (
@@ -212,10 +212,10 @@ CREATE TABLE public.users (
 );
 
 
-ALTER TABLE public.users OWNER TO doadmin;
+ALTER TABLE public.users OWNER TO postgres;
 
 --
--- Data for Name: _prisma_migrations; Type: TABLE DATA; Schema: public; Owner: doadmin
+-- Data for Name: _prisma_migrations; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public._prisma_migrations (id, checksum, finished_at, migration_name, logs, rolled_back_at, started_at, applied_steps_count) FROM stdin;
@@ -248,7 +248,7 @@ b1592165-e1ad-4cb0-b146-de7320e584cf	8a9306b1c14b59dd3d156d487bc8a52b2a22b32f357
 
 
 --
--- Data for Name: category_supplies; Type: TABLE DATA; Schema: public; Owner: doadmin
+-- Data for Name: category_supplies; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.category_supplies (id, name, created_at, updated_at) FROM stdin;
@@ -275,7 +275,7 @@ c117dd37-82ab-43a6-bf66-d97acef97f6e	Entretenimento	2024-05-05T00:00:00.000Z	202
 
 
 --
--- Data for Name: sessions; Type: TABLE DATA; Schema: public; Owner: doadmin
+-- Data for Name: sessions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.sessions (id, user_id, ip, user_agent, active, created_at, updated_at) FROM stdin;
@@ -478,7 +478,7 @@ b5a21c41-8482-492e-bba3-5bb03eac93c5	0bffa8f5-1e8d-455a-bd72-19ab9cc3f18c	201.54
 
 
 --
--- Data for Name: shelter_managers; Type: TABLE DATA; Schema: public; Owner: doadmin
+-- Data for Name: shelter_managers; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.shelter_managers (shelter_id, user_id, created_at, updated_at) FROM stdin;
@@ -486,7 +486,7 @@ COPY public.shelter_managers (shelter_id, user_id, created_at, updated_at) FROM 
 
 
 --
--- Data for Name: shelter_supplies; Type: TABLE DATA; Schema: public; Owner: doadmin
+-- Data for Name: shelter_supplies; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.shelter_supplies (shelter_id, supply_id, priority, created_at, updated_at, quantity) FROM stdin;
@@ -5885,7 +5885,7 @@ f3985a52-5c14-4cbb-b0d3-1702e26c15c5	6a220720-6fa3-42cc-8101-621da51b521f	10	202
 
 
 --
--- Data for Name: shelters; Type: TABLE DATA; Schema: public; Owner: doadmin
+-- Data for Name: shelters; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.shelters (id, pix, address, pet_friendly, sheltered_people, capacity, contact, created_at, updated_at, name, priority_sum, latitude, longitude, verified, city, neighbourhood, street, street_number, zip_code) FROM stdin;
@@ -6463,7 +6463,7 @@ e894e780-bd73-4b93-81f0-46a94cd7b431	\N	Av. Farroupilha, 8001, São José, Canoa
 
 
 --
--- Data for Name: supplies; Type: TABLE DATA; Schema: public; Owner: doadmin
+-- Data for Name: supplies; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.supplies (id, supply_category_id, name, created_at, updated_at) FROM stdin;
@@ -7745,7 +7745,7 @@ d1a27ea2-0281-4c95-9154-6509ede0f2dd	bf8b5e09-544f-4eff-9bb7-6220aaa34a85	Roupas
 
 
 --
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: doadmin
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.users (id, name, login, password, phone, created_at, updated_at, "accessLevel", "lastName") FROM stdin;
@@ -7774,7 +7774,7 @@ c46ed8c7-8b31-477b-9a90-a1abc9f43371	Patrícia	51992966082	$2b$10$PIGFIocNbZh0hx
 
 
 --
--- Name: _prisma_migrations _prisma_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: doadmin
+-- Name: _prisma_migrations _prisma_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public._prisma_migrations
@@ -7782,7 +7782,7 @@ ALTER TABLE ONLY public._prisma_migrations
 
 
 --
--- Name: category_supplies category_supplies_pkey; Type: CONSTRAINT; Schema: public; Owner: doadmin
+-- Name: category_supplies category_supplies_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.category_supplies
@@ -7790,7 +7790,7 @@ ALTER TABLE ONLY public.category_supplies
 
 
 --
--- Name: sessions sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: doadmin
+-- Name: sessions sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.sessions
@@ -7798,7 +7798,7 @@ ALTER TABLE ONLY public.sessions
 
 
 --
--- Name: shelter_managers shelter_managers_pkey; Type: CONSTRAINT; Schema: public; Owner: doadmin
+-- Name: shelter_managers shelter_managers_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.shelter_managers
@@ -7806,7 +7806,7 @@ ALTER TABLE ONLY public.shelter_managers
 
 
 --
--- Name: shelter_supplies shelter_supplies_pkey; Type: CONSTRAINT; Schema: public; Owner: doadmin
+-- Name: shelter_supplies shelter_supplies_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.shelter_supplies
@@ -7814,7 +7814,7 @@ ALTER TABLE ONLY public.shelter_supplies
 
 
 --
--- Name: shelters shelters_pkey; Type: CONSTRAINT; Schema: public; Owner: doadmin
+-- Name: shelters shelters_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.shelters
@@ -7822,7 +7822,7 @@ ALTER TABLE ONLY public.shelters
 
 
 --
--- Name: supplies supplies_pkey; Type: CONSTRAINT; Schema: public; Owner: doadmin
+-- Name: supplies supplies_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.supplies
@@ -7830,7 +7830,7 @@ ALTER TABLE ONLY public.supplies
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: doadmin
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users
@@ -7838,42 +7838,42 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: category_supplies_name_key; Type: INDEX; Schema: public; Owner: doadmin
+-- Name: category_supplies_name_key; Type: INDEX; Schema: public; Owner: postgres
 --
 
 CREATE UNIQUE INDEX category_supplies_name_key ON public.category_supplies USING btree (name);
 
 
 --
--- Name: shelters_name_key; Type: INDEX; Schema: public; Owner: doadmin
+-- Name: shelters_name_key; Type: INDEX; Schema: public; Owner: postgres
 --
 
 CREATE UNIQUE INDEX shelters_name_key ON public.shelters USING btree (name);
 
 
 --
--- Name: shelters_pix_key; Type: INDEX; Schema: public; Owner: doadmin
+-- Name: shelters_pix_key; Type: INDEX; Schema: public; Owner: postgres
 --
 
 CREATE UNIQUE INDEX shelters_pix_key ON public.shelters USING btree (pix);
 
 
 --
--- Name: users_login_key; Type: INDEX; Schema: public; Owner: doadmin
+-- Name: users_login_key; Type: INDEX; Schema: public; Owner: postgres
 --
 
 CREATE UNIQUE INDEX users_login_key ON public.users USING btree (login);
 
 
 --
--- Name: users_phone_key; Type: INDEX; Schema: public; Owner: doadmin
+-- Name: users_phone_key; Type: INDEX; Schema: public; Owner: postgres
 --
 
 CREATE UNIQUE INDEX users_phone_key ON public.users USING btree (phone);
 
 
 --
--- Name: sessions sessions_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: doadmin
+-- Name: sessions sessions_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.sessions
@@ -7881,7 +7881,7 @@ ALTER TABLE ONLY public.sessions
 
 
 --
--- Name: shelter_managers shelter_managers_shelter_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: doadmin
+-- Name: shelter_managers shelter_managers_shelter_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.shelter_managers
@@ -7889,7 +7889,7 @@ ALTER TABLE ONLY public.shelter_managers
 
 
 --
--- Name: shelter_managers shelter_managers_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: doadmin
+-- Name: shelter_managers shelter_managers_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.shelter_managers
@@ -7897,7 +7897,7 @@ ALTER TABLE ONLY public.shelter_managers
 
 
 --
--- Name: shelter_supplies shelter_supplies_shelter_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: doadmin
+-- Name: shelter_supplies shelter_supplies_shelter_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.shelter_supplies
@@ -7905,7 +7905,7 @@ ALTER TABLE ONLY public.shelter_supplies
 
 
 --
--- Name: shelter_supplies shelter_supplies_supply_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: doadmin
+-- Name: shelter_supplies shelter_supplies_supply_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.shelter_supplies
@@ -7913,7 +7913,7 @@ ALTER TABLE ONLY public.shelter_supplies
 
 
 --
--- Name: supplies supplies_supply_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: doadmin
+-- Name: supplies supplies_supply_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.supplies
@@ -7921,10 +7921,10 @@ ALTER TABLE ONLY public.supplies
 
 
 --
--- Name: DATABASE "sos-rs-prod-2"; Type: ACL; Schema: -; Owner: doadmin
+-- Name: DATABASE "sos_rs_db"; Type: ACL; Schema: -; Owner: postgres
 --
 
-GRANT CONNECT ON DATABASE "sos-rs-prod-2" TO adminsos;
+GRANT CONNECT ON DATABASE "sos_rs_db" TO rdsadmin;
 
 
 --
@@ -7932,93 +7932,93 @@ GRANT CONNECT ON DATABASE "sos-rs-prod-2" TO adminsos;
 --
 
 GRANT USAGE ON SCHEMA public TO staffsos;
-GRANT ALL ON SCHEMA public TO adminsos;
+GRANT ALL ON SCHEMA public TO rdsadmin;
 
 
 --
--- Name: TABLE _prisma_migrations; Type: ACL; Schema: public; Owner: doadmin
+-- Name: TABLE _prisma_migrations; Type: ACL; Schema: public; Owner: postgres
 --
 
 GRANT SELECT ON TABLE public._prisma_migrations TO staffsos;
-GRANT ALL ON TABLE public._prisma_migrations TO adminsos;
+GRANT ALL ON TABLE public._prisma_migrations TO rdsadmin;
 
 
 --
--- Name: TABLE category_supplies; Type: ACL; Schema: public; Owner: doadmin
+-- Name: TABLE category_supplies; Type: ACL; Schema: public; Owner: postgres
 --
 
 GRANT SELECT ON TABLE public.category_supplies TO staffsos;
-GRANT ALL ON TABLE public.category_supplies TO adminsos;
+GRANT ALL ON TABLE public.category_supplies TO rdsadmin;
 
 
 --
--- Name: TABLE sessions; Type: ACL; Schema: public; Owner: doadmin
+-- Name: TABLE sessions; Type: ACL; Schema: public; Owner: postgres
 --
 
 GRANT SELECT ON TABLE public.sessions TO staffsos;
-GRANT ALL ON TABLE public.sessions TO adminsos;
+GRANT ALL ON TABLE public.sessions TO rdsadmin;
 
 
 --
--- Name: TABLE shelter_managers; Type: ACL; Schema: public; Owner: doadmin
+-- Name: TABLE shelter_managers; Type: ACL; Schema: public; Owner: postgres
 --
 
 GRANT SELECT ON TABLE public.shelter_managers TO staffsos;
-GRANT ALL ON TABLE public.shelter_managers TO adminsos;
+GRANT ALL ON TABLE public.shelter_managers TO rdsadmin;
 
 
 --
--- Name: TABLE shelter_supplies; Type: ACL; Schema: public; Owner: doadmin
+-- Name: TABLE shelter_supplies; Type: ACL; Schema: public; Owner: postgres
 --
 
 GRANT SELECT ON TABLE public.shelter_supplies TO staffsos;
-GRANT ALL ON TABLE public.shelter_supplies TO adminsos;
+GRANT ALL ON TABLE public.shelter_supplies TO rdsadmin;
 
 
 --
--- Name: TABLE shelters; Type: ACL; Schema: public; Owner: doadmin
+-- Name: TABLE shelters; Type: ACL; Schema: public; Owner: postgres
 --
 
 GRANT SELECT ON TABLE public.shelters TO staffsos;
-GRANT ALL ON TABLE public.shelters TO adminsos;
+GRANT ALL ON TABLE public.shelters TO rdsadmin;
 
 
 --
--- Name: TABLE supplies; Type: ACL; Schema: public; Owner: doadmin
+-- Name: TABLE supplies; Type: ACL; Schema: public; Owner: postgres
 --
 
 GRANT SELECT ON TABLE public.supplies TO staffsos;
-GRANT ALL ON TABLE public.supplies TO adminsos;
+GRANT ALL ON TABLE public.supplies TO rdsadmin;
 
 
 --
--- Name: TABLE users; Type: ACL; Schema: public; Owner: doadmin
+-- Name: TABLE users; Type: ACL; Schema: public; Owner: postgres
 --
 
 GRANT SELECT ON TABLE public.users TO staffsos;
-GRANT ALL ON TABLE public.users TO adminsos;
+GRANT ALL ON TABLE public.users TO rdsadmin;
 
 
 --
--- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: public; Owner: doadmin
+-- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: public; Owner: postgres
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE doadmin IN SCHEMA public GRANT ALL ON SEQUENCES TO adminsos;
-
-
---
--- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: public; Owner: doadmin
---
-
-ALTER DEFAULT PRIVILEGES FOR ROLE doadmin IN SCHEMA public GRANT ALL ON FUNCTIONS TO adminsos;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON SEQUENCES TO rdsadmin;
 
 
 --
--- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: public; Owner: doadmin
+-- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: public; Owner: postgres
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE doadmin IN SCHEMA public GRANT SELECT ON TABLES TO staffsos;
-ALTER DEFAULT PRIVILEGES FOR ROLE doadmin IN SCHEMA public GRANT ALL ON TABLES TO adminsos;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON FUNCTIONS TO rdsadmin;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: public; Owner: postgres
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT SELECT ON TABLES TO staffsos;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON TABLES TO rdsadmin;
 
 
 --
