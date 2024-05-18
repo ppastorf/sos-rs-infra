@@ -9,6 +9,10 @@ include "env" {
   expose = true
 }
 
+dependency "vpc" {
+  config_path = "../../../vpc"
+}
+
 locals {
   zone_name = basename(dirname(get_terragrunt_dir()))
 }
@@ -17,6 +21,9 @@ inputs = {
   zones = {
     (local.zone_name) = {
       force_destroy = true
+      vpc = {
+        vpc_id = dependency.vpc.outputs.vpc_id
+      }
     }
   }
 }

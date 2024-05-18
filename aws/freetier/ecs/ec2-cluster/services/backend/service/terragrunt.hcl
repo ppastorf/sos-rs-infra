@@ -22,7 +22,11 @@ dependency "alb" {
 }
 
 # dependency "database" {
-#   config_path = "../../../../../rds/backend-db/aurora-cluster"
+#   config_path = "../../../../../rds/backend-db/postgres"
+# }
+
+# dependency "database_dns" {
+#   config_path = "../../../../../rds/backend-db/route53-record"
 # }
 
 locals {
@@ -36,6 +40,7 @@ locals {
   app_config = {
     port = 80
     host = "0.0.0.0"
+    database_name = "sos_rs_db"
   }
 
   # gerenciado manualmente, precisa subir o banco primeiro
@@ -84,7 +89,7 @@ inputs = {
         },
         # {
         #   name = "DB_HOST",
-        #   value = dependency.database.outputs.cluster_endpoint
+        #   value = values(dependency.database_dns.outputs.route53_record_fqdn)[0]
         # },
         # {
         #   name = "DB_PORT",
