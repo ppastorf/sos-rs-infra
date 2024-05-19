@@ -23,7 +23,7 @@ inputs = {
   zone_id = values(dependency.zone.outputs.route53_zone_zone_id)[0]
   records = [
     {
-      name  = "backend-db"
+      name  = "api"
       type  = "A"
       alias = {
         name    = dependency.alb.outputs.dns_name
