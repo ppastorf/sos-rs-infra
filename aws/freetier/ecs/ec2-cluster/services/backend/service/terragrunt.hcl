@@ -33,9 +33,9 @@ locals {
   # consideracao importante ao montar a pipeline de deploy:
   # https://github.com/terraform-aws-modules/terraform-aws-ecs/blob/master/docs/README.md#service-1
 
+  service_name    = "${include.env.locals.env_prefix}-backend"
   container_name  = "server"
-  container_image = "923013710130.dkr.ecr.sa-east-1.amazonaws.com/sos-rs-freetier-backend"
-  image_tag       = "v0.1.2"
+  container_image = "ghcr.io/ppastorf/sos-rs-backend"
 
   app_config = {
     port = 80
@@ -48,35 +48,25 @@ locals {
 }
 
 inputs = {
-  name        = "${include.env.locals.env_prefix}-backend"
+  name        = local.service_name
   cluster_arn = dependency.ecs_cluster.outputs.arn
 
   # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-tasks-services.html#fargate-tasks-size
   cpu    = 512
   memory = 1024
+  launch_type = "FARGATE"
 
   enable_autoscaling = true
   autoscaling_min_capacity = 1
   autoscaling_max_capacity = 4
-
   enable_execute_command = true
-  launch_type = "FARGATE"
-  # ignore_task_definition_changes = true
+
+  ignore_task_definition_changes = true
 
   # https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html
   container_definitions = {
     (local.container_name) = {
-      image = "${local.container_image}:${local.image_tag}"
-
-      # cpu    = 512
-      # memory = 1024
-      # memory_reservation = 512
-
-      entrypoint = ["sh", "-c"]
-
-      command = [
-        "npx prisma generate && npx prisma migrate deploy && npm run build && npm run start:dev"
-      ]
+      image = "${local.container_image}"
 
       environment = [
         {

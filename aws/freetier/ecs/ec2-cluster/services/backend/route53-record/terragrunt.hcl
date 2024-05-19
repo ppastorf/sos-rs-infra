@@ -10,22 +10,24 @@ include "env" {
 }
 
 dependency "zone" {
-  config_path = "../../zone"
+  config_path = "../../../../../route53/sos-rs-freetier.com/zone"
 }
 
-dependency "target_lb" {
-  config_path = "../../../../ecs/ec2-cluster/services/backend/alb"
+dependency "alb" {
+  config_path = "../alb"
 }
+
+# api.sos-rs-freetier.com
 
 inputs = {
-  zone_id   = values(dependency.zone.outputs.route53_zone_zone_id)[0]
+  zone_id = values(dependency.zone.outputs.route53_zone_zone_id)[0]
   records = [
     {
-      name  = "api"
+      name  = "backend-db"
       type  = "A"
       alias = {
-        name    = dependency.target_lb.outputs.dns_name
-        zone_id = dependency.target_lb.outputs.zone_id
+        name    = dependency.alb.outputs.dns_name
+        zone_id = dependency.alb.outputs.zone_id
       }
     }
   ]

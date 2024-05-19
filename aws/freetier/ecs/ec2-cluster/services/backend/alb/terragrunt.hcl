@@ -64,7 +64,7 @@ inputs = {
 
       health_check = {
         enabled = true
-        path = "/shelters"
+        path = "/health"
         # healthy_threshold = ""
         # interval = ""
         # matcher = ""
@@ -74,20 +74,22 @@ inputs = {
         # unhealthy_threshold = ""
       }
 
-      # ip_address_type = ""
-      # lambda_multi_value_headers_enabled = ""
+      # target_health_state = {
+        # enable_unhealthy_connection_termination = ""
+      # }
+
       # load_balancing_algorithm_type = ""
       # load_balancing_anomaly_mitigation = ""
       # load_balancing_cross_zone_enabled = ""
-      # preserve_client_ip = ""
+
+
+      # ip_address_type = ""
       # protocol_version = ""
       # proxy_protocol_v2 = ""
       # slow_start = ""
       # connection_termination = ""
+
       # deregistration_delay = ""
-      # target_health_state = {
-        # enable_unhealthy_connection_termination = ""
-      # }
       # target_failover = {
         # on_deregistration = ""
         # on_unhealthy = ""

@@ -2,9 +2,9 @@
 
 REPO_ROOT := $(shell git rev-parse --show-toplevel)
 
-# unico modulo
+# single module
 module_operations := init validate plan apply destroy show output providers refresh test
-$(module_operations): %:
+$(module_operations):
 	@DIR="$(filter-out $@,$(MAKECMDGOALS))"; \
 	terragrunt $@ --terragrunt-working-dir=$(REPO_ROOT)/$$DIR
 

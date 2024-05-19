@@ -8,18 +8,22 @@
 # 2.1 conectividade entre a jumpbox e o endpoint do rds
 # 2.2 jumpbox acessivel via ssh
 
-# config
-DB_HOST=""
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+
+## config
+
+# make output aws/freetier/rds/backend-db/route53-record
+DB_HOST="backend-db.internal.sos-rs-freetier.com"
 DB_PORT="5432"
-DB_NAME="sos_rs_db"
 DB_USER="postgres"
 DB_PASS=""
 
+# make output aws/freetier/ec2/jumpbox/instance | grep public_ip | awk -F\" '{ print $2 }'
 JUMPBOX_HOST=""
 JUMPBOX_USER="ubuntu"
 JUMPBOX_SSHKEY=""
 
-DUMP_FILE="data/postgres/dump.sql"
+DUMP_FILE="${REPO_ROOT}/data/postgres/dump.sql"
 
 scp -i $JUMPBOX_SSHKEY $DUMP_FILE ${JUMPBOX_USER}@${JUMPBOX_HOST}:/tmp/dump.sql
 ssh -T -i $JUMPBOX_SSHKEY ${JUMPBOX_USER}@${JUMPBOX_HOST} 1>/dev/null <<EOF
