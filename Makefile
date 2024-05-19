@@ -3,18 +3,14 @@
 REPO_ROOT := $(shell git rev-parse --show-toplevel)
 
 # single module
-module_operations := init validate plan apply destroy show output providers refresh test
+module_operations := init validate plan apply destroy show output providers refresh test "plan --destroy"
 $(module_operations):
 	@DIR="$(filter-out $@,$(MAKECMDGOALS))"; \
 	terragrunt $@ --terragrunt-working-dir=$(REPO_ROOT)/$$DIR
 
-plan-destroy:
-	@DIR="$(filter-out $@,$(MAKECMDGOALS))"; \
-	terragrunt plan --destroy --terragrunt-working-dir=$(REPO_ROOT)/$$DIR
-
-state-list:
-	@DIR="$(filter-out $@,$(MAKECMDGOALS))"; \
-	terragrunt state list --terragrunt-working-dir=$(REPO_ROOT)/$$DIR
+# plan-destroy:
+# 	@DIR="$(filter-out $@,$(MAKECMDGOALS))"; \
+# 	terragrunt plan --destroy --terragrunt-working-dir=$(REPO_ROOT)/$$DIR
 
 clear-cache:
 	@DIR="$(filter-out $@,$(MAKECMDGOALS))"; \
@@ -37,7 +33,15 @@ destroy-all:
 	@DIR="$(filter-out $@,$(MAKECMDGOALS))"; \
 	terragrunt run-all destroy --terragrunt-working-dir=$(REPO_ROOT)/$$DIR
 
+validate-all:
+	@DIR="$(filter-out $@,$(MAKECMDGOALS))"; \
+	terragrunt run-all validate --terragrunt-working-dir=$(REPO_ROOT)/$$DIR
+
 clear-cache-all:
 	@DIR="$(filter-out $@,$(MAKECMDGOALS))"; \
 	find $(REPO_ROOT)/$$DIR/ -type d -name "*.terragrunt-cache" | xargs rm -rf
+
+infracost:
+	@DIR="$(filter-out $@,$(MAKECMDGOALS))"; \
+	infracost breakdown --path=$$DIR
 

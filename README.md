@@ -4,6 +4,7 @@
 
 - [Terraform / OpenTofu](https://opentofu.org/docs/intro/install/)
 - [Terragrunt](https://terragrunt.gruntwork.io/docs/getting-started/install/)
+- [Infracost](https://github.com/infracost/infracost)
 
 # Autenticacao
 Pode-se usar variaveis de ambiente para autenticar com a AWS.
