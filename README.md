@@ -9,27 +9,28 @@
 # Autenticacao
 Pode-se usar variaveis de ambiente para autenticar com a AWS.
 
-# Deploy
-1. Autenticar
 ```
 echo | tee .env <<EOF
-AWS_ACCESS_KEY_ID=''
-AWS_SECRET_ACCESS_KEY=''
+AWS_ACCESS_KEY_ID='chave'
+AWS_SECRET_ACCESS_KEY='chave'
 AWS_REGION=sa-east-1
 EOF
 
 export `cat .env | xargs`
 ```
 
-2. Validar plan
+# Deploy
+1. Validar plan
 ```
 make plan caminho/do/modulo
 ```
 
-3. Aplicar
+2. Aplicar
 ```
 make apply caminho/do/modulo
 ```
+
+O makefile tem outras diretivas uteis.
 
 # Workflow de Contribuicao
 Abra um PR com as mudancas propostas, colocar o output do plan no PR.
