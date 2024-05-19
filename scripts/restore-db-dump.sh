@@ -11,17 +11,16 @@
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 
 ## config
-
-# make output aws/freetier/rds/backend-db/route53-record
 DB_HOST="backend-db.internal.sos-rs-freetier.com"
+# DB_HOST=""
 DB_PORT="5432"
 DB_USER="postgres"
-DB_PASS=""
+DB_PASS="$PGPASSWORD"
 
-# make output aws/freetier/ec2/jumpbox/instance | grep public_ip | awk -F\" '{ print $2 }'
-JUMPBOX_HOST=""
+JUMPBOX_HOST="$(make output aws/freetier/ec2/jumpbox/instance | grep public_ip | awk -F\" '{ print $2 }')"
+# JUMPBOX_HOST=""
 JUMPBOX_USER="ubuntu"
-JUMPBOX_SSHKEY=""
+JUMPBOX_SSHKEY="~/.ssh/sos-rs-dev-jumpbox.pem"
 
 DUMP_FILE="${REPO_ROOT}/data/postgres/dump.sql"
 
