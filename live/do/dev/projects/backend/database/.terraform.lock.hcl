@@ -3,7 +3,7 @@
 
 provider "registry.opentofu.org/digitalocean/digitalocean" {
   version     = "2.38.0"
-  constraints = ">= 2.28.1"
+  constraints = ">= 2.28.1, >= 2.29.0"
   hashes = [
     "h1:mt8OAQIvPAxYtS2mLAfodM904F517Ot7bDcEDZ8knfI=",
     "zh:04d1ca6ac6d7e69635657aeac8aadb75f84018305514381f9d7bed48065df61b",

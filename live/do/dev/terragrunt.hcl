@@ -2,7 +2,7 @@ locals {
   project_name = "sos-rs"
   environment  = "dev"
   region       = "nyc3" # https://docs.digitalocean.com/platform/regional-availability/
-  account_id   = "923013710130"
+  project_id   = "b511e8e1-8353-42f0-a229-d3878e7c1cb6" # sos-rs-do-dev
   provider     = "do"
   env_prefix   = "${local.project_name}-${local.provider}-${local.environment}"
 }

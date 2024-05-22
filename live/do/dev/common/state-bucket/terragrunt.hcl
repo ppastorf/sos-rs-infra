@@ -1,5 +1,3 @@
-# https://registry.terraform.io/modules/rhysjson/spaces-bucket/digitalocean/latest
-
 terraform {
   source = "${get_repo_root()}/modules/do/spaces-bucket"
 }

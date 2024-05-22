@@ -21,7 +21,7 @@ inputs = {
   vpc_id = dependency.vpc.outputs.id
 
   # https://slugs.do-api.dev/
-  image = "docker-20-04"
+  image = "ubuntu-20-04-x64"
   size = "s-1vcpu-1gb"
   ssh_key_name = "sos-rs"
   graceful_shutdown = true
