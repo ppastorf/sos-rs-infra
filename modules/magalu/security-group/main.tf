@@ -27,17 +27,17 @@ variable "description" {
     type = string
 }
 
-variable "rules" {
-    type = list(object{
-        direction = string
-        ethertype = string
-        port_range_max = number
-        port_range_min = number
-        protocol = string
-        remote_group_id = string
-        remote_ip_prefix = string
-        validate_quota = bool
-        wait = bool 
-    })
-    default = []
-}
+# variable "rules" {
+#     type = list(object{
+#         direction = string
+#         ethertype = string
+#         port_range_max = number
+#         port_range_min = number
+#         protocol = string
+#         remote_group_id = string
+#         remote_ip_prefix = string
+#         validate_quota = bool
+#         wait = bool 
+#     })
+#     default = []
+# }
