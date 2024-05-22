@@ -5,7 +5,7 @@ terraform {
 }
 
 include "env" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
@@ -50,12 +50,12 @@ inputs = {
   cpu    = 2048
   memory = 4096
 
-  enable_autoscaling = true
+  enable_autoscaling       = true
   autoscaling_min_capacity = 1
   autoscaling_max_capacity = 4
 
   enable_execute_command = true
-  launch_type = "FARGATE"
+  launch_type            = "FARGATE"
 
   # ignore_task_definition_changes = true
 
@@ -76,11 +76,11 @@ inputs = {
 
       environment = [
         {
-          name = "PORT",
+          name  = "PORT",
           value = local.app_config.port
         },
         {
-          name = "HOST",
+          name  = "HOST",
           value = local.app_config.host
         },
         # {
@@ -107,14 +107,14 @@ inputs = {
         #   valueFrom = "${dependency.database.outputs.cluster_master_user_secret.value[0].secret_arn}:password"
         # },
         {
-          name = "SECRET_KEY",
+          name      = "SECRET_KEY",
           valueFrom = "${local.secret_manager_config_arn}:SECRET_KEY::"
         },
         {
-          name = "DATABASE_URL",
+          name      = "DATABASE_URL",
           valueFrom = "${local.secret_manager_config_arn}:DATABASE_URL::"
         }
-      ] 
+      ]
 
       port_mappings = [
         {
@@ -123,13 +123,13 @@ inputs = {
         }
       ]
 
-      readonly_root_filesystem = false
+      readonly_root_filesystem  = false
       enable_cloudwatch_logging = true
     }
   }
 
   assign_public_ip = false
-  subnet_ids = dependency.vpc.outputs.private_subnets
+  subnet_ids       = dependency.vpc.outputs.private_subnets
 
   load_balancer = {
     service = {

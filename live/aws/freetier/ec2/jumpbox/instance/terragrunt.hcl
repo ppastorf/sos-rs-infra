@@ -5,7 +5,7 @@ terraform {
 }
 
 include "env" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
@@ -24,16 +24,16 @@ locals {
 }
 
 inputs = {
-  name = "${include.env.locals.env_prefix}-jumpbox"
+  name          = "${include.env.locals.env_prefix}-jumpbox"
   instance_type = "t3.micro"
 
   ami      = local.ami_id
   key_name = local.ssh_key_name
 
-  availability_zone = dependency.vpc.outputs.azs[0]
-  subnet_id         = dependency.vpc.outputs.public_subnets[0]
+  availability_zone           = dependency.vpc.outputs.azs[0]
+  subnet_id                   = dependency.vpc.outputs.public_subnets[0]
   associate_public_ip_address = true
-  vpc_security_group_ids = [dependency.security_group.outputs.security_group_id]
+  vpc_security_group_ids      = [dependency.security_group.outputs.security_group_id]
 
   monitoring = true
 

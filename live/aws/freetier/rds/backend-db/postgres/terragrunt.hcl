@@ -5,7 +5,7 @@ terraform {
 }
 
 include "env" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
@@ -20,9 +20,9 @@ dependency "security_group" {
 inputs = {
   identifier = "${include.env.locals.env_prefix}-backend-db"
 
-  multi_az = false
-  availability_zone = dependency.vpc.outputs.azs[0]
-  subnet_ids        = dependency.vpc.outputs.private_subnets
+  multi_az               = false
+  availability_zone      = dependency.vpc.outputs.azs[0]
+  subnet_ids             = dependency.vpc.outputs.private_subnets
   create_db_subnet_group = true
   vpc_security_group_ids = [dependency.security_group.outputs.security_group_id]
 
@@ -30,13 +30,13 @@ inputs = {
   engine               = "postgres"
   engine_version       = "15"
   family               = "postgres15"
-  major_engine_version = "15" 
+  major_engine_version = "15"
   instance_class       = "db.t3.micro"
 
   # acesso
-  db_name  = "sos_rs_db"
-  username = "postgres"
-  port     = 5432
+  db_name                     = "sos_rs_db"
+  username                    = "postgres"
+  port                        = 5432
   manage_master_user_password = true
 
   # armazenamento

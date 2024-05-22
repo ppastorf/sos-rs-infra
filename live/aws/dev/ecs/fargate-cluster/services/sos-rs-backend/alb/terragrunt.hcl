@@ -5,7 +5,7 @@ terraform {
 }
 
 include "env" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
@@ -18,12 +18,12 @@ locals {
 }
 
 inputs = {
-  name = local.alb_name
+  name               = local.alb_name
   load_balancer_type = "application"
 
   internal = false
-  vpc_id  = dependency.vpc.outputs.vpc_id
-  subnets = dependency.vpc.outputs.public_subnets
+  vpc_id   = dependency.vpc.outputs.vpc_id
+  subnets  = dependency.vpc.outputs.public_subnets
 
   enable_deletion_protection = false
 
@@ -61,14 +61,14 @@ inputs = {
     ecs-http = {
       name_prefix = "h1"
       # name = ""
-      protocol    = "HTTP"
-      port        = 80
-      target_type = "ip"
+      protocol          = "HTTP"
+      port              = 80
+      target_type       = "ip"
       create_attachment = false
 
       health_check = {
         enabled = true
-        path = "/shelters"
+        path    = "/shelters"
         # healthy_threshold = ""
         # interval = ""
         # matcher = ""
@@ -90,11 +90,11 @@ inputs = {
       # connection_termination = ""
       # deregistration_delay = ""
       # target_health_state = {
-        # enable_unhealthy_connection_termination = ""
+      # enable_unhealthy_connection_termination = ""
       # }
       # target_failover = {
-        # on_deregistration = ""
-        # on_unhealthy = ""
+      # on_deregistration = ""
+      # on_unhealthy = ""
       # }
     }
   }

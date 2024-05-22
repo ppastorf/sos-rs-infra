@@ -5,7 +5,7 @@ terraform {
 }
 
 include "env" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
@@ -16,12 +16,12 @@ locals {
 inputs = {
   bucket = local.name
 
-  force_destroy       = true
+  force_destroy = true
 
   # managed cloudfront CDN
   acceleration_status = "Suspended"
 
-  request_payer       = "BucketOwner"
+  request_payer = "BucketOwner"
 
   # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_object_lock_configuration
   # object_lock_enabled = true

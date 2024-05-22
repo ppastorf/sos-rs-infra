@@ -5,17 +5,17 @@ terraform {
 }
 
 include "env" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
 inputs = {
-  cluster_name = "${include.env.locals.env_prefix}-ec2_cluster"
+  cluster_name                          = "${include.env.locals.env_prefix}-ec2_cluster"
   default_capacity_provider_use_fargate = true
   cluster_settings = [
     {
-      "name": "containerInsights",
-      "value": "enabled"
+      "name" : "containerInsights",
+      "value" : "enabled"
     }
   ]
 }

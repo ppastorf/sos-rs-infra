@@ -3,8 +3,8 @@ locals {
   environment  = "dev"
   region       = "br-se1" # br-ne1
   // account_id   = ""
-  provider     = "mgc"
-  env_prefix   = "[${local.project_name}-${local.environment}-${local.provider}"
+  provider   = "mgc"
+  env_prefix = "[${local.project_name}-${local.environment}-${local.provider}"
 }
 
 # mgc --region br-se1 object-storage buckets create sos-rs-mgc-dev-tfstate --enable-versioning --private

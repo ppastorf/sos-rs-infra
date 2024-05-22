@@ -5,7 +5,7 @@ terraform {
 }
 
 include "env" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
@@ -19,9 +19,9 @@ locals {
 }
 
 inputs = {
-  name   = local.name
+  name        = local.name
   description = local.name
-  vpc_id = dependency.vpc.outputs.vpc_id
+  vpc_id      = dependency.vpc.outputs.vpc_id
 
   ingress_with_cidr_blocks = [
     {

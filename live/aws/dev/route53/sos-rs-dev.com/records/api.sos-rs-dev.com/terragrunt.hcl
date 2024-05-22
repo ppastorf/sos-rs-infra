@@ -5,7 +5,7 @@ terraform {
 }
 
 include "env" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
@@ -18,11 +18,11 @@ dependency "target_lb" {
 }
 
 inputs = {
-  zone_id   = values(dependency.zone.outputs.route53_zone_zone_id)[0]
+  zone_id = values(dependency.zone.outputs.route53_zone_zone_id)[0]
   records = [
     {
-      name  = "api"
-      type  = "A"
+      name = "api"
+      type = "A"
       alias = {
         name    = dependency.target_lb.outputs.dns_name
         zone_id = dependency.target_lb.outputs.zone_id

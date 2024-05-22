@@ -5,7 +5,7 @@ terraform {
 }
 
 include "env" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
@@ -14,7 +14,7 @@ inputs = {
   repository_type = "private"
 
   repository_image_tag_mutability = "IMMUTABLE"
-  repository_encryption_type = "AES256"
-  repository_image_scan_on_push = false
-  create_lifecycle_policy = false
+  repository_encryption_type      = "AES256"
+  repository_image_scan_on_push   = false
+  create_lifecycle_policy         = false
 }

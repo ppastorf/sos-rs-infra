@@ -3,11 +3,11 @@ terraform {
 }
 
 include "env" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
 inputs = {
-    name = "vpc"
-    description = "vpc"
+  name        = "vpc"
+  description = "vpc"
 }

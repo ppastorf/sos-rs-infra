@@ -5,7 +5,7 @@ terraform {
 }
 
 include "env" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
@@ -23,9 +23,9 @@ inputs = {
   zone_id = values(dependency.zone.outputs.route53_zone_zone_id)[0]
   records = [
     {
-      name  = "jumpbox-instance"
-      type  = "A"
-      ttl = 300
+      name    = "jumpbox-instance"
+      type    = "A"
+      ttl     = 300
       records = [dependency.instance.outputs.public_ip]
     }
   ]

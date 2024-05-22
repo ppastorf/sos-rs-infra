@@ -5,7 +5,7 @@ terraform {
 }
 
 include "env" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
   expose = true
 }
 
@@ -14,8 +14,8 @@ inputs = {
 
   cluster_settings = [
     {
-      "name": "containerInsights",
-      "value": "enabled"
+      "name" : "containerInsights",
+      "value" : "enabled"
     }
   ]
 
@@ -25,7 +25,7 @@ inputs = {
     FARGATE = {
       default_capacity_provider_strategy = {
         weight = 100
-        base = 0
+        base   = 0
       }
     }
     FARGATE_SPOT = {
