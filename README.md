@@ -7,13 +7,15 @@
 - [Infracost](https://github.com/infracost/infracost)
 
 # Autenticacao
-Pode-se usar variaveis de ambiente para autenticar com a AWS.
+Pode-se usar variaveis de ambiente para autenticar com a Digital Ocean (as variaveis da AWS sao tem os mesmos valores que as `SPACES_`, usadas para autenticar com o Spaces, que eh um fork do S3).
 
 ```
 echo | tee .env <<EOF
-AWS_ACCESS_KEY_ID='chave'
-AWS_SECRET_ACCESS_KEY='chave'
-AWS_REGION=sa-east-1
+DIGITALOCEAN_TOKEN=''
+SPACES_ACCESS_KEY_ID=''
+SPACES_SECRET_ACCESS_KEY=''
+AWS_ACCESS_KEY_ID=''
+AWS_SECRET_ACCESS_KEY=''
 EOF
 
 export `cat .env | xargs`

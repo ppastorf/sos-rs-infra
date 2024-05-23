@@ -34,7 +34,13 @@ inputs = {
       protocol           = "tcp"
       port_range         = "22"
       source_addresses   = ["0.0.0.0/0", "::/0"]
+    },
+    {
+      protocol           = "udp"
+      port_range         = "51280"
+      source_addresses   = ["0.0.0.0/0", "::/0"]
     }
+
   ]
 
   firewall_outbound_rules = [
