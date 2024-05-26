@@ -1,0 +1,37 @@
+---
+- name: Configure WireGuard
+  hosts: backend_server
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Ensure docker cli plugins dir
+      file:
+        path: ~/.docker/cli-plugins
+        state: directory
+
+    - name: Download docker-rollout script
+      get_url:
+        url: https://raw.githubusercontent.com/wowu/docker-rollout/master/docker-rollout
+        dest: ~/.docker/cli-plugins/docker-rollout
+        mode: "0755"g
+
+    - name: Ensure app dir
+      file:
+        path: "{{ app_dir }}"
+        state: directory
+
+    - name: Put docker compose file
+      template:
+        src: templates/docker-compose.yml.j2
+        dest: "{{ app_dir }}/docker-compose.yml"
+
+    - name: Put nginx config file
+      template:
+        src: templates/nginx.conf.j2
+        dest: "{{ app_dir }}/nginx.conf"
+
+    - name: Start the service
+      shell:
+        chdir: "{{ app_dir }}"
+        cmd: |
+          docker compose -f docker-compose.yml up -d

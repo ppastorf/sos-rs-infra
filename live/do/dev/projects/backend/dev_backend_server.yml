@@ -1,0 +1,19 @@
+---
+all:
+  hosts:
+    backend_server:
+      # pode usar o ip privado apos subir a VPN
+      ansible_host: 10.1.0.3
+      ansible_user: root
+      ansible_connection: ssh
+      app_dir: ~/sos-rs-backend
+      app_image: ghcr.io/ppastorf/sos-rs-backend
+      app_image_tag: latest
+      app_host: 0.0.0.0
+      app_port: 4000
+      nginx_port: 80
+      db_host: 10.1.0.4
+      db_port: 25060
+      db_user: doadmin
+      db_password: 
+      db_database_name: sos_rs_db

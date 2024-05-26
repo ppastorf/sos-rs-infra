@@ -33,8 +33,13 @@ inputs = {
     {
       protocol           = "tcp"
       port_range         = "22"
-      source_addresses   = [include.env.locals.vpc_cidr]
+      source_addresses   = [include.env.locals.vpc_cidr, "0.0.0.0/0"]
     },
+    {
+      protocol           = "tcp"
+      port_range         = "80"
+      source_addresses   = [include.env.locals.vpc_cidr]
+    }
   ]
 
   firewall_outbound_rules = [
