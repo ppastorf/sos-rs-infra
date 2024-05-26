@@ -5,6 +5,7 @@ locals {
   project_id   = "b511e8e1-8353-42f0-a229-d3878e7c1cb6" # sos-rs-do-dev
   provider     = "do"
   env_prefix   = "${local.project_name}-${local.provider}-${local.environment}"
+  vpc_cidr     = "10.1.0.0/16"
 }
 
 // https://github.com/MattMorgis/digitalocean-spaces-terraform-backend/tree/master

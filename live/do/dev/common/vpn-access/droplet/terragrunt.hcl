@@ -30,17 +30,18 @@ inputs = {
 
   firewall_enabled = true
   firewall_inbound_rules = [
-    {
-      protocol           = "tcp"
-      port_range         = "22"
-      source_addresses   = ["0.0.0.0/0", "::/0"]
-    },
+    # fechar essa porta apos configurar a VPN
+    // {
+    //   protocol           = "tcp"
+    //   port_range         = "22"
+    //   source_addresses   = ["0.0.0.0/0", "::/0"]
+    // },
+    # essa porta deve continuar aberta
     {
       protocol           = "udp"
       port_range         = "51280"
       source_addresses   = ["0.0.0.0/0", "::/0"]
     }
-
   ]
 
   firewall_outbound_rules = [
