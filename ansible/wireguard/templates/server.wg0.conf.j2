@@ -1,0 +1,13 @@
+[Interface]
+Address = {{ server.vpn_ip }}
+ListenPort = {{ server.listen_port }}
+PrivateKey = {{ private_key }}
+PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE; iptables -t nat -A POSTROUTING -s {{ vpn_cidr }} -d {{ vpc_cidr }} -o {{ server.vpc_if }} -j MASQUERADE;
+PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE;  iptables -t nat -D POSTROUTING -s {{ vpn_cidr }} -d {{ vpc_cidr }} -o {{ server.vpc_if }} -j MASQUERADE;
+SaveConfig = true
+
+{% for peer in server.peers %}
+[Peer]
+PublicKey = {{ peer.public_key }}
+AllowedIPs = {{ peer.allowed_ips }}
+{% endfor %}

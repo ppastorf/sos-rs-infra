@@ -1,0 +1,12 @@
+[Interface]
+PrivateKey = {{ private_key }}
+Address = {{ client_ip }}
+PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+SaveConfig = true
+
+[Peer]
+PublicKey = {{ server_public_key }}
+AllowedIPs = {{ vpn_cidr }}, {{ vpc_cidr }}
+Endpoint = {{ server_endpoint }}
+PersistentKeepalive = 25

@@ -1,0 +1,22 @@
+---
+all:
+  hosts:
+    vpn_server:
+      # pode usar o ip privado apos subir a VPN
+      ansible_host: 159.89.35.241
+      ansible_user: root
+      ansible_connection: ssh
+      vpn_cidr: 10.2.0.0/16
+      vpc_cidr: 10.1.0.0/16
+      server:
+        public_key: kPsvfnmmoEuA+ymNye4uV9GgT+bMIcK55H83aJLe9DU=
+        vpn_ip: 10.2.0.1/16 # precisa incluir a mascara do vpn_cidr
+        vpc_if: eth1
+        ssh_user: root
+        private_ip: 10.1.0.2
+        listen_port: 51280
+        # peers: []
+        peers:
+          # pastor
+          - public_key: ImjEdFHmcdDN5lov9OL3Ke39jPXcST1+tHBqw2lfUV0=
+            allowed_ips: 10.2.0.2/32

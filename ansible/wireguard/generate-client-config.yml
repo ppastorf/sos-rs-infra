@@ -1,0 +1,54 @@
+---
+- name: Configure WireGuard
+  hosts: localhost
+  gather_facts: no
+  become: yes
+  vars:
+    # apenas usado para gerar uma configuracao local
+    client_ip: 10.2.0.2/32
+    out_file: /etc/wireguard/wg0.conf 
+    server_endpoint: 159.89.35.241:51280
+    server_public_key: kPsvfnmmoEuA+ymNye4uV9GgT+bMIcK55H83aJLe9DU=
+    vpn_cidr: 10.2.0.0/16
+    vpc_cidr: 10.1.0.0/16
+  tasks:
+    - name: Check if private key exists
+      stat:
+        path: /etc/wireguard/privatekey
+      register: privatekey_file
+
+    - name: Check if public key exists
+      stat:
+        path: /etc/wireguard/publickey
+      register: publickey_file
+
+    - name: Generate private key
+      shell: |
+        wg genkey | tee /etc/wireguard/privatekey
+      when: not privatekey_file.stat.exists
+
+    - name: Generate public key
+      shell: |
+        cat /etc/wireguard/privatekey | wg pubkey | tee /etc/wireguard/publickey
+      when: not publickey_file.stat.exists
+
+    - name: Get private key
+      slurp:
+        src: /etc/wireguard/privatekey
+      register: privatekey
+
+    - name: Get public key
+      slurp:
+        src: /etc/wireguard/publickey
+      register: publickey
+
+    - name: Create config
+      template:
+        src: templates/client.wg0.conf.j2
+        dest: "{{ out_file }}"
+      vars:
+        private_key: "{{ privatekey.content | b64decode | regex_replace('\n$', '') }}"
+
+    - name: Display publickey
+      debug:
+        msg: "{{ publickey.content | b64decode | regex_replace('\n$', '') }}"
