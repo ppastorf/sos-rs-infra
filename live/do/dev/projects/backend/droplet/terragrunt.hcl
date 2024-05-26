@@ -33,7 +33,7 @@ inputs = {
     {
       protocol           = "tcp"
       port_range         = "22"
-      source_addresses   = [include.env.locals.vpc_cidr, "0.0.0.0/0"]
+      source_addresses   = [include.env.locals.vpc_cidr]
     },
   ]
 

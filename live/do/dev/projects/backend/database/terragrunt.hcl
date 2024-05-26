@@ -17,14 +17,6 @@ locals {
   project = basename(dirname(get_terragrunt_dir())) # parent dir name
 }
 
-# username = doadmin
-# password = 'AVNS_HXBRHolrnpCiYxM3Bma' 
-# host = private-sos-rs-do-dev-backend-database-dev-pg-do-user-14947697.c.db.ondigitalocean.com
-# ip = 10.1.0.3
-# port = 25060
-# database = defaultdb
-# sslmode = require
-
 inputs = {
   name        = "${include.env.locals.env_prefix}-${local.project}-database"
   project_id  = include.env.locals.project_id
@@ -57,7 +49,7 @@ inputs = {
   firewall_rules = [
     {
       type  = "ip_addr"
-      value = "10.1.0.0/16"
+      value = include.env.locals.vpc_cidr
     }
   ]
 }
